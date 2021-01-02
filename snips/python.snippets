@@ -1,0 +1,102 @@
+# A valid snippet should starts with:
+#
+#   snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#   endsnippet
+#
+# Snippet options:
+#
+#   b - Beginning of line.
+#   i - In-word expansion.
+#   w - Word boundary.
+#   r - Regular expression
+#   e - Custom context snippet
+#   A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#   snippet emitter "emitter properties" b
+#   private readonly ${1} = new Emitter<$2>()
+#   public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#   endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet com:80 "comment" b
+######################${1}##########################################################
+endsnippet
+
+snippet com:120 "comment" b
+########################${1}################################################################################################
+endsnippet
+
+snippet sm "split comment" b
+# =================$1=============================================================================================START==
+$0
+# ================================================================================================================END==
+endsnippet
+
+snippet for:dict:key:value "for key value in dict" b
+for ${3:key},${4:value }in ${1:map}.items():
+    ${2:pass}
+endsnippet
+
+snippet for:dict:key "for key in dict" b
+for ${3:key} in ${1:map}.keys():
+    ${2:pass}
+endsnippet
+
+snippet for:dict:value "for value in dict" b
+for ${3:value} in ${1:map}.values():
+    ${2:pass}
+endsnippet
+
+snippet for:list:index:value "for index value in list" b
+for ${3:index},${4:value} in enumerate(${1:array}):
+    ${2:pass}
+endsnippet
+
+############################################################## 算法
+
+snippet algorithms:graph:segments2line "线段拼成连续直线" b
+def connect(segments):
+    """
+    给定一些线段，返回这些线段连成的直线
+    ps:本实现假设所以的线段能且仅能连成一条直线
+    输入:线段数组，每条线段用两个节点表示，[[ node_a,node_b ],[node_b,node_c] ...]
+    输出:[node_a,node_b...]
+    """
+
+    def node_init(node_id):
+        return {"node_id": node_id, "in_degree": 0, "next_nodes": None}
+
+    node_map = {}
+    for node in segments:
+        start, end = node[0], node[1]
+        if start not in node_map.keys():
+            node_map[start] = node_init(start)
+        if end not in node_map.keys():
+            node_map[end] = node_init(end)
+        start = node_map[start]
+        end = node_map[end]
+        start["next_nodes"] = end
+        end["in_degree"] += 1
+
+    # 遍历图
+    first_node = None
+    for node in node_map.values():
+        if not node["in_degree"]:
+            first_node = node
+            break
+
+    way = []
+    current = first_node
+    while current:
+        way.append(current["node_id"])
+        current = current["next_nodes"]
+
+    return way
+endsnippet
+

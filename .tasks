@@ -1,0 +1,15 @@
+# vim: set fenc=utf-8 ft=dosini:
+
+# define a new task named "file-build"
+[async2allServer]
+command=[[ "$(hostname)" == *"MacBook"* ]] && make -f $HOME/.config/nvim/Makefile sync-all
+cwd=$(VIM_ROOT)
+output=terminal
+save=2
+
+[push2rmGFW]
+command=bash script/pushNeovimConfig.sh
+cwd=$(VIM_ROOT)
+output=terminal
+save=2
+
